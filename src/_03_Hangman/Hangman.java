@@ -14,9 +14,12 @@ public class Hangman implements KeyListener {
 	JLabel label;
 	String readRandom;
 	String findLetters;
+	int lives = 0;
+	int gotRight = 0;
 public static void main(String[] args) {
 	Hangman hang = new Hangman();
 	hang.setup();
+	
 }
 void setup() {
 	readRandom = Utilities.readRandomLineFromFile("dictionary.txt");
@@ -29,7 +32,7 @@ void setup() {
 	 for (int i = 0; i < readRandom.length(); i++) {
 		findLetters += "_";
 	}
-	 label.setText(findLetters);
+	 formatLabel();
 	 panel.add(label);
 	 frame.add(panel);
 	 frame.addKeyListener(this);
@@ -40,6 +43,17 @@ void setup() {
 @Override
 public void keyPressed(KeyEvent arg0) {
 	// TODO Auto-generated method stub
+	lives+=1;
+	if(lives>=readRandom.length()+4) {
+		JOptionPane.showMessageDialog(null, "Game Over!");
+		int ync = JOptionPane.showConfirmDialog(null, "Would you like to play again?");
+		if(ync == 0) {
+			frame.dispose();
+			setup();
+		} else {
+			System.exit(0);
+		}
+	}
 	char getK = arg0.getKeyChar();
 	System.out.println(getK);
 	if((getK>= 65 && getK <= 90) || (getK >= 97 && getK <= 122)) {
@@ -50,13 +64,36 @@ public void keyPressed(KeyEvent arg0) {
 				StringBuilder build = new StringBuilder(findLetters);
 				build.setCharAt(i, getK);
 				findLetters = build.toString();
-				if(getK >= readRandom.length()+4) {
-					JOptionPane.showMessageDialog(null, "Game Over!");
+				if(findLetters == readRandom) {
+					int b = JOptionPane.showConfirmDialog(null, "You Got It Right! Would You Like To Restart?!");
+					if(b == 0) {
+						frame.dispose();
+						setup();
+					} else {
+						System.exit(0);
+					}
 				}
+				//if(getK >= readRandom.length()+4) {
+					//JOptionPane.showMessageDialog(null, "Game Over!");
+					//int ync = JOptionPane.showConfirmDialog(null ,"Would you like to restart?");
+					//if(ync == 0) {
+						//setup();
+					//} else {
+					//	System.exit(0);
+					//}
+				//}
 			}
 		} 
-		label.setText(findLetters);
+		formatLabel();
 	}
+}
+void formatLabel() {
+	String labelText = "";
+	for (int i = 0; i < findLetters.length(); i++) {
+		labelText+= findLetters.charAt(i) + " ";
+		
+	}
+	label.setText(labelText);
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
