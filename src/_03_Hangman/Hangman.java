@@ -12,9 +12,11 @@ public class Hangman implements KeyListener {
 	JFrame frame;
 	JPanel panel;
 	JLabel label;
+	JLabel labe;
 	String readRandom;
 	String findLetters;
 	int lives = 0;
+	int txlives;
 	int gotRight = 0;
 public static void main(String[] args) {
 	Hangman hang = new Hangman();
@@ -22,11 +24,13 @@ public static void main(String[] args) {
 	
 }
 void setup() {
-	readRandom = Utilities.readRandomLineFromFile("dictionary.txt");
+	 readRandom = Utilities.readRandomLineFromFile("dictionary.txt");
+	 txlives = readRandom.length()+4;
 	JOptionPane.showMessageDialog(null, "This is hangman: type in a letter and see if it is part of the full word.");
 	frame = new JFrame();
 	 panel = new JPanel();
 	 label = new JLabel();
+	 labe = new JLabel();
 	 frame.setVisible(true);
 	 findLetters = "";
 	 for (int i = 0; i < readRandom.length(); i++) {
@@ -34,9 +38,11 @@ void setup() {
 	}
 	 formatLabel();
 	 panel.add(label);
+	 panel.add(labe);
 	 frame.add(panel);
 	 frame.addKeyListener(this);
 	 frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+	 labe.setText(" You have "+txlives + " lives!");
 	 frame.pack();
 	
 }
@@ -44,7 +50,10 @@ void setup() {
 public void keyPressed(KeyEvent arg0) {
 	// TODO Auto-generated method stub
 	lives+=1;
-	if(lives>=readRandom.length()+4) {
+	txlives-=1;
+	labe.setText(" You have "+txlives + " lives!");
+	
+			if(lives>=readRandom.length()+4) {
 		JOptionPane.showMessageDialog(null, "Game Over!");
 		int ync = JOptionPane.showConfirmDialog(null, "Would you like to play again?");
 		if(ync == 0) {
