@@ -23,8 +23,10 @@ public class MazeMaker {
         //    This will be the starting point. Then select a random cell along
         //    the opposite wall and remove its exterior wall. This will be the
         //    finish line.
-        Cell cell = maze.getCell(0, randGen.nextInt(cols));
+        Cell cell = maze.getCell(randGen.nextInt(rows), 0);
         cell.setWestWall(false);
+        Cell c3 = maze.getCell(randGen.nextInt(rows), cols-1);
+        c3.setEastWall(false);
         // 2. select a random cell in the maze to start 
         Cell c2 = maze.getCell(randGen.nextInt(rows), randGen.nextInt(cols));
         // 3. call the selectNextPath method with the randomly selected cell
@@ -60,7 +62,13 @@ if(c1.size()>0) {
 
         // C5. call the selectNextPath method with the current cell
 
-
+if(c1.size()<= 0) {
+	if(!uncheckedCells.isEmpty()) {
+		currentCell = uncheckedCells.pop();
+		selectNextPath(currentCell);
+		
+	}
+}
         // D. if all neighbors are visited
 
         // D1. if the stack is not empty
